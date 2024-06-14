@@ -39,9 +39,7 @@ if you want to use env_num, go to lib/train/admin/local.py and lib/test/evaluati
 
 ## Evaluation
 
-Checkpoint and raw results is coming soon
-
-Download [checkpoint](https://drive.google.com/file/d/1XrSpF6plvnasbamIPTNtDc_qBN4xo9Ny/view?usp=sharing) and put it under `$PROJECT_ROOT$/output`.
+Download [checkpoint and raw results](https://drive.google.com/file/d/1XrSpF6plvnasbamIPTNtDc_qBN4xo9Ny/view?usp=sharing) and put it under `$PROJECT_ROOT$/output`.
 
 ```
 python tracking/test_multi.py 

@@ -53,6 +53,7 @@ output/
 # Translations
 *.mo
 *.pot
+*.zip
 
 # Django stuff:
 *.log
