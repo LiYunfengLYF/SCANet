@@ -1,0 +1,114 @@
+DATA:
+  RGB_MODE: True
+  RGBS_MODE: True
+  RGBS_ROTATE: False
+  MAX_SAMPLE_INTERVAL: 200
+  MEAN:
+    - 0.485
+    - 0.456
+    - 0.406
+  STD:
+    - 0.229
+    - 0.224
+    - 0.225
+  SEARCH:
+    CENTER_JITTER: 3
+    FACTOR: 4.0
+    SCALE_JITTER: 0.25
+    SIZE: 256
+    NUMBER: 2
+  TEMPLATE:
+    CENTER_JITTER: 0
+    FACTOR: 2.0
+    SCALE_JITTER: 0
+    SIZE: 128
+    NUMBER: 2
+  TRAIN:
+    DATASETS_NAME:
+      - LASOT
+      - GOT10K_vottrain
+      - COCO17
+      - TRACKINGNET
+      - SARDET
+    DATASETS_RATIO:
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+    SAMPLE_PER_EPOCH: 60000
+  VAL:
+    DATASETS_NAME:
+      - GOT10K_votval
+    DATASETS_RATIO:
+      - 1
+    SAMPLE_PER_EPOCH: 10000
+MODEL:
+  NETWORK: SCANet_network
+  BACKBONE:
+    TYPE: vit_base_patch16_224_midlayer
+    STRIDE: 16
+    USE_PRETRAINED: False
+    LOAD_MODE: 1
+    PARAMS:
+      pretrained: False
+      ffm: SCAM
+      rgbs_loc: [ 3,6,9 ]
+    SEP_SEG: False
+    CAT_MODE: direct
+  HEAD:
+    TYPE: center_head
+    PARAMS:
+      inplanes: 768
+      channel: 256
+      feat_sz: 16
+      stride: 16
+  RGBS_HEAD:
+    TYPE: center_head
+    PARAMS:
+      inplanes: 768
+      channel: 256
+      feat_sz: 16
+      stride: 16
+  EXTRA_MERGER: False
+  RETURN_INTER: False
+  RETURN_STAGES: [ 2, 5, 8, 11 ]
+TRAIN:
+  LEARN:
+    EPOCH: 10
+    BATCH_SIZE: 32
+    SEED: 42
+    LR: 0.00001
+    IOU_TYPE: giou
+    GIOU_WEIGHT: 2.0
+    L1_WEIGHT: 5.0
+    WEIGHT_DECAY: 0.0001
+  ACTOR:
+    TYPE: SCANet_Actor
+  PRETRAIN:
+    SOT_MODEL: True
+    FREEZE_SOT_MODEL: False
+    SOT_PRETRAIN_FILE: OSTrack_ep0300.pth.tar
+  OPTIMIZER:
+    TYPE: ADAMW
+    DECAY_RATE: 0.1
+  SCHEDULER:
+    TYPE: step
+    LR_DROP_EPOCH: 30
+  TRAINER:
+    NUM_WORKER: 8
+    VAL_EPOCH_INTERVAL: 1
+    SAVE_INTERVAL: 1
+    PRINT_INTERVAL: 50
+    AMP:
+      USED: False
+      GRAD_CLIP_NORM: 0.1
+  FREEZE:
+    USED: False
+    LAYERS: [ 0, ]
+TEST:
+  EPOCH: 10
+  SEARCH_FACTOR: 4.0
+  SEARCH_SIZE: 256
+  TEMPLATE_FACTOR: 2.0
+  TEMPLATE_SIZE: 128
